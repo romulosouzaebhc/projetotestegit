@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Página de Teste — EBHC</title>
+  <style>
+    :root{ --bg:#f7f9fc; --card:#fff; --text:#222; --accent:#0b74de; }
+    [data-theme="dark"]{ --bg:#0f1720; --card:#0b1116; --text:#e6eef8; --accent:#58a6ff; }
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:var(--bg); color:var(--text); padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+    nav a{margin-right:12px;text-decoration:none;color:var(--accent);font-weight:600}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:18px}
+    footer{margin-top:22px;font-size:13px;opacity:0.8}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid rgba(0,0,0,0.06)}
+    .controls{display:flex;gap:8px;align-items:center}
+    input,button,select{padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.12)}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 style="margin:0">Página de Teste</h1>
+      <div style="font-size:13px;color:gray">Arquivo de exemplo gerado automaticamente</div>
+    </div>
+    <div class="controls">
+      <nav class="card" style="padding:8px">
+        <a href="#form">Formulário</a>
+        <a href="#tabela">Tabela</a>
+        <a href="#acoes">Ações</a>
+      </nav>
+      <button id="themeBtn" class="card">Alternar tema</button>
+    </div>
+  </header>
+
+  <section class="grid">
+    <article class="card">
+      <h2 id="form">Formulário de teste</h2>
+      <form id="testForm">
+        <label>Nome<br/><input type="text" id="nome" placeholder="Seu nome"></label><br/><br/>
+        <label>E-mail<br/><input type="email" id="email" placeholder="seu@exemplo.com"></label><br/><br/>
+        <label>Serviço<br/>
+          <select id="servico">
+            <option>Selecione...</option>
+            <option>Consultoria</option>
+            <option>Suporte</option>
+            <option>Instalação</option>
+          </select>
+        </label><br/><br/>
+        <button type="submit">Enviar</button>
+        <button type="button" id="limpar">Limpar</button>
+      </form>
+      <div id="resultado" style="margin-top:12px;font-size:14px"></div>
+    </article>
+
+    <article class="card">
+      <h2 id="tabela">Tabela de amostra</h2>
+      <table>
+        <thead>
+          <tr><th>Cliente</th><th>Serviço</th><th>Status</th></tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td>Empresa A</td><td>Consultoria</td><td>Ativo</td></tr>
+          <tr><td>Empresa B</td><td>Suporte</td><td>Pendente</td></tr>
+          <tr><td>Empresa C</td><td>Instalação</td><td>Concluído</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px">
+        <button id="addRow">Adicionar linha</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2 id="acoes">Ações e scripts</h2>
+      <p>Use os botões abaixo para testar pequenos trechos de JavaScript integrados na página.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="alertBtn">Mostrar alerta</button>
+        <button id="consoleBtn">Log no console</button>
+        <button id="fillBtn">Preencher formulário</button>
+      </div>
+      <pre id="console" style="background:#0b1220;color:#cfe9ff;padding:10px;border-radius:8px;margin-top:12px;display:none"></pre>
+    </article>
+  </section>
+
+  <footer class="card">
+    <small>Exemplo simples — modifique livremente para seus testes.</small>
+  </footer>
+
+  <script>
+    // Alterna tema claro/escuro
+    const themeBtn = document.getElementById('themeBtn')
+    themeBtn.addEventListener('click', ()=>{
+      const root = document.documentElement
+      if(root.getAttribute('data-theme') === 'dark') root.removeAttribute('data-theme')
+      else root.setAttribute('data-theme','dark')
+    })
+
+    // Formulário
+    const form = document.getElementById('testForm')
+    const resultado = document.getElementById('resultado')
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault()
+      const nome = document.getElementById('nome').value.trim()
+      const email = document.getElementById('email').value.trim()
+      const servico = document.getElementById('servico').value
+      if(!nome || !email || servico === 'Selecione...'){
+        resultado.textContent = 'Preencha todos os campos.'
+        resultado.style.color = 'crimson'
+        return
+      }
+      resultado.style.color = 'green'
+      resultado.textContent = `Obrigado, ${nome}! Recebemos sua solicitação para: ${servico}.`;
+    })
+    document.getElementById('limpar').addEventListener('click', ()=>{
+      form.reset(); resultado.textContent = ''
+    })
+
+    // Adicionar linha na tabela
+    document.getElementById('addRow').addEventListener('click', ()=>{
+      const tbody = document.getElementById('tbody')
+      const tr = document.createElement('tr')
+      tr.innerHTML = `<td>Nova Empresa</td><td>Teste</td><td>--</td>`
+      tbody.appendChild(tr)
+    })
+
+    // Ações de demonstração
+    document.getElementById('alertBtn').addEventListener('click', ()=>alert('Alerta de teste!'))
+    document.getElementById('consoleBtn').addEventListener('click', ()=>{
+      console.log('Mensagem de teste no console — Romulo')
+      const pre = document.getElementById('console')
+      pre.style.display = 'block'
+      pre.textContent += '\n[console] Mensagem de teste registrada em ' + new Date().toLocaleTimeString()
+    })
+    document.getElementById('fillBtn').addEventListener('click', ()=>{
+      document.getElementById('nome').value = 'Fulano de Tal'
+      document.getElementById('email').value = 'fulano@exemplo.com'
+      document.getElementById('servico').value = 'Consultoria'
+    })
+  </script>
+</body>
+</html>
